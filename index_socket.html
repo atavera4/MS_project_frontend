@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+<meta content="utf-8" http-equiv="encoding">
+
+<style>
+    /* just some super basic css to make things bit more readable */
+    div {
+        margin: 10em;
+    }
+    form {
+        margin: 10em;
+    }
+</style>
+</head>
+<body>
+    <img id="profileImage" src="data:image/jpg;base64, pic">
+    
+    <form class="foo">
+        <input id="input"></input>
+        <input type="submit"></input>
+    </form>
+    <div id="output"></div>
+</body>
+<script type="text/javascript">
+    // use vanilla JS because why not
+  var pic = "";
+ function start() {   
+    var num = 1;
+    // create websocket instance
+    var mySocket = new WebSocket("ws://localhost:8080/ws");
+
+    // add event listener reacting when message is received
+    mySocket.onmessage = function (event) {
+       
+        // console.log(event.data)
+        pic = event.data;
+        
+    };
+    
+    setInterval(function(){ 
+            document.getElementById("profileImage").setAttribute("src", "data:image/png;base64," + pic);
+            //console.log(pic);
+            // var iosImg = new Image;
+            // iosImg.src = "data:image/png;base64," + pic;
+            // iosImg.crossOrigin = 'Anonymous';
+            // Change this to target your element and add it wherever you need it to appear
+             // document.body.appendChild(iosImg);
+            mySocket.send(num);
+            num+=1;
+       }, 200);
+
+   
+    
+
+    
+        
+    return;
+}
+
+start();
+</script>
+</html>
